@@ -69,7 +69,7 @@ If you deployed RH IDM/LDAP with this repo's provisioner then it's using self-si
 The easiest way to do this is to call the ```ss-ca-stuffer.sh``` script with a host that you'd like to pull the cert from, such as the following:
 
 ```bash
-$ oc exec cjoc-0 -- curl -L -sS -o /var/jenkins_home/ss-ca-stuffer.sh https://raw.githubusercontent.com/FierceSoftware/devsecops-workshop-wizbang/master/cloudbees-core/ss-ca-stuffer.sh
+$ oc exec cjoc-0 -- curl -L -sS -o /var/jenkins_home/ss-ca-stuffer.sh https://raw.githubusercontent.com/kenmoini/openshift-cloudbees-core/master/ss-ca-stuffer.sh
 $ oc exec cjoc-0 -- chmod +x /var/jenkins_home/ss-ca-stuffer.sh
 $ oc exec cjoc-0 -- /var/jenkins_home/ss-ca-stuffer.sh idm.example.com:636
 ```
