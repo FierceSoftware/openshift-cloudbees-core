@@ -1,0 +1,16 @@
+
+vars.sh
+
+working-configmap-jcasc-kubernetes-plugin.yaml
+working-configmap-jcasc-openshift-plugin.yaml
+working-configmap-jcasc-rocketchat-plugin.yaml
+
+configuration-as-code/working-kubernetes.yaml
+configuration-as-code/working-openshift.yaml
+configuration-as-code/working-rocketchat.yaml
+
+groovy-scripts/working-create-credentials.groovy
+groovy-scripts/working-create-generic-credentials.groovy
+groovy-scripts/working-create-oc-client-credentials.groovy
+groovy-scripts/working-create-oc-sync-credentials.groovy
+groovy-scripts/working-configure-ldap.groovy
