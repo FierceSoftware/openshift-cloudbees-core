@@ -219,18 +219,18 @@ If deploying with LDAP and the OCP integrations you'll want to provision the Tea
 
 There are a few sample Team Master templates that you can use the ```jenkins-cli``` to deploy.
 
-- ```test-basic-team.json``` - This file should work no matter what - the recipe and user are native to Jenkins
-- ```test-ocp-team.json``` - This file is the OCP Java + Node Team with just a single native admin user - also should work.
-- ```workshop-team.json``` - This file is the same as the ```test-ocp-team``` but also includes the ```ipausers``` group for LDAP integrations.  Evidently there's a rule of thumb to not have more than 20 Member entries for a team, so 50 individual users would cause it to fail...
+- ```jenkins-cli-scripts/test-basic-team.json``` - This file should work no matter what - the recipe and user are native to Jenkins
+- ```jenkins-cli-scripts/test-ocp-team.json``` - This file is the OCP Java + Node Team with just a single native admin user - also should work.
+- ```jenkins-cli-scripts/workshop-team.json``` - This file is the same as the ```test-ocp-team``` but also includes the ```ipausers``` group for LDAP integrations.  Evidently there's a rule of thumb to not have more than 20 Member entries for a team, so 50 individual users would cause it to fail...
 
 If you kept your temporary working directory after deployment, you'll find the ```jenkins-cli.jar``` file there.  If not just simply navigate to ***cloudbees-core.ocp.example.com/cjoc/jnlpJars/jenkins-cli.jar*** to download it.
 
 The commands to deploy the Team Masters are similar to the following examples *(oh, you need Java installed btw, tested with OpenJDK 11)*:
 
 ```bash
-$ java -jar jenkins-cli.jar -auth admin:your_admin_password -s https://cloudbees-core.ocp.example.com/cjoc/ teams "test-from-cli" --put < test-basic-team.json
-$ java -jar jenkins-cli.jar -auth admin:your_admin_password -s https://cloudbees-core.ocp.example.com/cjoc/ teams "ocp-test-from-cli" --put < test-ocp-team.json
-$ java -jar jenkins-cli.jar -auth admin:your_admin_password -s https://cloudbees-core.ocp.example.com/cjoc/ teams "workshop-team" --put < workshop-team.json
+$ java -jar jenkins-cli.jar -auth admin:your_admin_password -s https://cloudbees-core.ocp.example.com/cjoc/ teams "test-from-cli" --put < jenkins-cli-scripts/test-basic-team.json
+$ java -jar jenkins-cli.jar -auth admin:your_admin_password -s https://cloudbees-core.ocp.example.com/cjoc/ teams "ocp-test-from-cli" --put < jenkins-cli-scripts/test-ocp-team.json
+$ java -jar jenkins-cli.jar -auth admin:your_admin_password -s https://cloudbees-core.ocp.example.com/cjoc/ teams "workshop-team" --put < jenkins-cli-scripts/workshop-team.json
 ```
 
 With a few minutes time, you should see your Teams deployed in Teams/BlueOcean.

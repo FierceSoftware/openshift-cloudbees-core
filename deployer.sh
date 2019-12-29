@@ -97,7 +97,7 @@ function continueWithCJOCConfig {
 
     echo -e "\n================================================================================"
     echo -e "Sending plugin stuffer to CJOC pod..."
-    oc $OC_ARG_OPTIONS exec cjoc-0 -- curl -L -sS -o /var/jenkins_home/cjoc-plugin-stuffer.sh "https://raw.githubusercontent.com/${GIT_USERNAME}/${GIT_REPO_NAME}/${GIT_BRANCH_REF}/cjoc-plugin-stuffer.sh"
+    oc $OC_ARG_OPTIONS exec cjoc-0 -- curl -L -sS -o /var/jenkins_home/cjoc-plugin-stuffer.sh "https://raw.githubusercontent.com/${GIT_USERNAME}/${GIT_REPO_NAME}/${GIT_BRANCH_REF}/container-scripts/cjoc-plugin-stuffer.sh"
     oc $OC_ARG_OPTIONS exec cjoc-0 -- chmod +x /var/jenkins_home/cjoc-plugin-stuffer.sh
     oc $OC_ARG_OPTIONS exec cjoc-0 -- /var/jenkins_home/cjoc-plugin-stuffer.sh openshift-client workflow-scm-step workflow-step-api workflow-api jsch durable-task workflow-job workflow-multibranch branch-api workflow-support pipeline-stage-step pipeline-input-step pipeline-graph-analysis pipeline-milestone-step pipeline-rest-api pipeline-build-step momentjs handlebars pipeline-stage-view workflow-durable-task-step pipeline-model-api pipeline-model-extensions pipeline-model-definition pipeline-model-declarative-agent pipeline-stage-tags-metadata git-server git git-client workflow-cps-global-lib docker-workflow rocketchatnotifier lockable-resources workflow-basic-steps workflow-cps openshift-sync openshift-pipeline pipeline-utility-steps configuration-as-code
 
@@ -122,14 +122,14 @@ function continueWithCJOCConfig {
     echo -e "\n================================================================================"
     echo -e "Pushing Plugin Catalog to CJOC...\n"
 
-    curl -L -sS -o $CBC_OCP_WORK_DIR/dso-ocp-workshop-plugin-catalog.json https://raw.githubusercontent.com/${GIT_USERNAME}/${GIT_REPO_NAME}/${GIT_BRANCH_REF}/dso-ocp-workshop-plugin-catalog.json
+    curl -L -sS -o $CBC_OCP_WORK_DIR/dso-ocp-workshop-plugin-catalog.json https://raw.githubusercontent.com/${GIT_USERNAME}/${GIT_REPO_NAME}/${GIT_BRANCH_REF}/jenkins-cli-scripts/dso-ocp-workshop-plugin-catalog.json
 
     java -jar $CBC_OCP_WORK_DIR/jenkins-cli.jar -s "${JENKINS_PROTOCOL_PREFIX}://${OCP_CJOC_ROUTE}/cjoc/" plugin-catalog --put < $CBC_OCP_WORK_DIR/dso-ocp-workshop-plugin-catalog.json
 
     echo -e "\n\n================================================================================"
     echo -e "Pushing Team Master Recipe to CJOC...\n"
 
-    curl -L -sS -o $CBC_OCP_WORK_DIR/team-master-recipes.json https://raw.githubusercontent.com/${GIT_USERNAME}/${GIT_REPO_NAME}/${GIT_BRANCH_REF}/team-master-recipes.json
+    curl -L -sS -o $CBC_OCP_WORK_DIR/team-master-recipes.json https://raw.githubusercontent.com/${GIT_USERNAME}/${GIT_REPO_NAME}/${GIT_BRANCH_REF}/jenkins-cli-scripts/team-master-recipes.json
 
     java -jar $CBC_OCP_WORK_DIR/jenkins-cli.jar -s "${JENKINS_PROTOCOL_PREFIX}://${OCP_CJOC_ROUTE}/cjoc/" team-creation-recipes --put < $CBC_OCP_WORK_DIR/team-master-recipes.json
 
@@ -250,7 +250,7 @@ function continueWithCJOCConfig {
         echo -e "\n================================================================================"
         echo -e "Sending SSL CA Stuffer to CJOC pod...\n"
 
-        oc $OC_ARG_OPTIONS exec cjoc-0 -- curl -L -sS -o /var/jenkins_home/ss-ca-stuffer.sh https://raw.githubusercontent.com/${GIT_USERNAME}/${GIT_REPO_NAME}/${GIT_BRANCH_REF}/ss-ca-stuffer.sh
+        oc $OC_ARG_OPTIONS exec cjoc-0 -- curl -L -sS -o /var/jenkins_home/ss-ca-stuffer.sh https://raw.githubusercontent.com/${GIT_USERNAME}/${GIT_REPO_NAME}/${GIT_BRANCH_REF}/container-scripts/ss-ca-stuffer.sh
         oc $OC_ARG_OPTIONS exec cjoc-0 -- chmod +x /var/jenkins_home/ss-ca-stuffer.sh
         oc $OC_ARG_OPTIONS exec cjoc-0 -- /var/jenkins_home/ss-ca-stuffer.sh $LDAP_STUFFER_URL
         
@@ -324,7 +324,7 @@ function continueWithCJOCConfig {
 
     echo -e "\n================================================================================"
     echo "Creating Workshop Team Master..."
-    curl -L -sS -o $CBC_OCP_WORK_DIR/workshop-team.json https://raw.githubusercontent.com/${GIT_USERNAME}/${GIT_REPO_NAME}/${GIT_BRANCH_REF}/workshop-team.json
+    curl -L -sS -o $CBC_OCP_WORK_DIR/workshop-team.json https://raw.githubusercontent.com/${GIT_USERNAME}/${GIT_REPO_NAME}/${GIT_BRANCH_REF}/jenkins-cli-scripts/workshop-team.json
 
     java -jar $CBC_OCP_WORK_DIR/jenkins-cli.jar -s "${JENKINS_PROTOCOL_PREFIX}://${OCP_CJOC_ROUTE}/cjoc/" teams "workshop-team" --put < $CBC_OCP_WORK_DIR/workshop-team.json
 
@@ -351,10 +351,12 @@ function continueWithCJOCConfig {
 echo -e "\n\n================================================================================"
 echo -e "Checking prerequisites...\n"
 
-checkForProgram oc
+checkForProgram awk
 checkForProgram curl
 checkForProgram git
 checkForProgram java
+checkForProgram oc
+
 
 ## Make the script interactive to set the variables
 if [ "$INTERACTIVE" = "true" ]; then
@@ -538,8 +540,8 @@ if [ "$OCP_CREATE_PROJECT" = "false" ]; then
 fi
 
 echo -e "\n================================================================================"
-echo "Making temporary directory..."
-mkdir -p $CBC_OCP_WORK_DIR
+echo "Clearing & making temporary directory..."
+rm -rf $CBC_OCP_WORK_DIR && mkdir -p $CBC_OCP_WORK_DIR
 
 echo -e "\n================================================================================"
 echo -e "Downloading Cloudbees Core directory listing...\n"
@@ -550,9 +552,12 @@ echo "Downloading the latest from https://downloads.cloudbees.com/cloudbees-core
 curl -L -sS -o "$CBC_OCP_WORK_DIR/cjoc.tgz" https://downloads.cloudbees.com/cloudbees-core/cloud/latest/$MATCH_LINK
 
 echo -e "\n================================================================================"
-echo -e "Setting Cloudbees Core YAML configuration...\n"
+echo -e "Extracting Cloudbees Core package...\n"
 
-cd $CBC_OCP_WORK_DIR && tar zxvf cjoc.tgz && cd cloudbees-core_* && \
+cd $CBC_OCP_WORK_DIR && tar zxvf cjoc.tgz && cd cloudbees-core_*
+
+echo -e "\n================================================================================"
+echo -e "Setting Cloudbees Core YAML configuration...\n"
 
 if [ "$OCP_CJOC_ROUTE_EDGE_TLS" = "true" ]; then
     sed -e s,http://cloudbees-core,https://cloudbees-core,g < cloudbees-core.yml > tmp && mv tmp cloudbees-core-working.yml && \
@@ -564,6 +569,24 @@ else
     sed -e s,cloudbees-core.example.com,$OCP_CJOC_ROUTE,g < cloudbees-core-working.yml > tmp && mv tmp cloudbees-core-working.yml && \
     sed -e s,myproject,$OCP_PROJECT_NAME,g < cloudbees-core-working.yml > tmp && mv tmp cloudbees-core-working.yml
 fi
+
+sed -e 's/readOnly: true/readOnly: false/g' < cloudbees-core-working.yml > tmp && mv tmp cloudbees-core-working.yml
+
+awk 'BEGIN{ print_flag=1 } 
+{
+    if( $0 ~ /      affinity:/ )
+    {
+       print_flag=0;
+       next
+    }
+    if( $0 ~ /^      [a-zA-Z0-9]+:$/ )
+    {
+        print_flag=1;
+    }
+    if ( print_flag == 1 )
+        print $0
+
+}' cloudbees-core-working.yml > tmp && mv tmp cloudbees-core-working.yml
 
 if [ "$OCP_CJOC_SKIP_SETUP" = "trueAF" ]; then
     ## On second thought dont skip since it leaves it super wide open
@@ -607,9 +630,9 @@ JENKINS_ADMIN_PASS="$(oc $OC_ARG_OPTIONS exec cjoc-0 -- cat /var/jenkins_home/se
 echo "Attempting admin password read-out: $JENKINS_ADMIN_PASS"
 
 if [ "$OCP_CJOC_ROUTE_EDGE_TLS" = "true" ]; then
-    echo -e "\n If you get a password above, please log into your Admin user at https://$OCP_CJOC_ROUTE/cjoc/ and\n 1. Complete the Setup Wizard\n 2. Disable CSRF and CAP\n 3. Come back and finish this script...I know, it is lame.\n\n Oh and when you get to the Create First Admin User screen just click Continue as admin - please.  Or otherwise modify this script with your intended password..."
+    echo -e "\n If you get a password above, please log into your Admin user at https://$OCP_CJOC_ROUTE/cjoc/ and\n\n 1. Complete the Setup Wizard\n 2. Disable CSRF and CAP\n 3. Come back and finish this script...I know, it is lame.\n\n Oh and when you get to the Create First Admin User screen just click Continue as admin - please.  Or otherwise modify this script with your intended password..."
 else
-    echo -e "\n If you get a password above, please log into your Admin user at http://$OCP_CJOC_ROUTE/cjoc/ and\n 1. Complete the Setup Wizard\n 2. Disable CSRF and CAP\n 3. Come back and finish this script...I know, it is lame.\n\n Oh and when you get to the Create First Admin User screen just click Continue as admin - please.  Or otherwise modify this script with your intended password..."
+    echo -e "\n If you get a password above, please log into your Admin user at http://$OCP_CJOC_ROUTE/cjoc/ and\n\n 1. Complete the Setup Wizard\n 2. Disable CSRF and CAP\n 3. Come back and finish this script...I know, it is lame.\n\n Oh and when you get to the Create First Admin User screen just click Continue as admin - please.  Or otherwise modify this script with your intended password..."
 fi
 
 promptToContinueAfterCJOCDeploy

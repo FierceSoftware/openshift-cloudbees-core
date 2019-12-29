@@ -1,0 +1,26 @@
+{
+    "data": {
+        "displayName": "workshop-team",
+        "icon": {
+            "color": "#71a9da",
+            "name": "tiger"
+        },
+        "members": [
+            {
+                "id": "admin",
+                "roles": [
+                    "TEAM_ADMIN"
+                ]
+            },
+            {
+                "id": "ipausers",
+                "roles": [
+                    "TEAM_MEMBER"
+                ]
+            }
+        ],
+        "provisioningRecipe": "ocp-java-nodejs",
+        "name": "workshop-team"
+    },
+    "version": "1"
+}
