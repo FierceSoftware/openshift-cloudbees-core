@@ -181,7 +181,7 @@ function continueWithCJOCConfig {
         cp $DEPLOYER_ORIGIN_DIR/configuration-as-code/example.openshift.yaml $DEPLOYER_ORIGIN_DIR/configuration-as-code/working-openshift.yaml
 
         sed -i -e s,CJOC_NAMESPACE_HERE,$OCP_PROJECT_NAME,g $DEPLOYER_ORIGIN_DIR/configuration-as-code/working-openshift.yaml
-        sed -i -e s,EXTRA_OC_SYNC_NAMESPACES_HERE,$EXTRA_OC_SYNC_NAMESPACES_HERE,g $DEPLOYER_ORIGIN_DIR/configuration-as-code/working-openshift.yaml
+        sed -i -e 's/EXTRA_OC_SYNC_NAMESPACES_HERE/'"$EXTRA_OC_SYNC_NAMESPACES_HERE"'/g' $DEPLOYER_ORIGIN_DIR/configuration-as-code/working-openshift.yaml
 
         oc $OC_ARG_OPTIONS exec cjoc-0 -- mkdir -p /var/jenkins_home/jcasc_config/
 
