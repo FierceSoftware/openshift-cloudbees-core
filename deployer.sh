@@ -630,9 +630,9 @@ JENKINS_ADMIN_PASS="$(oc $OC_ARG_OPTIONS exec cjoc-0 -- cat /var/jenkins_home/se
 echo "Attempting admin password read-out: $JENKINS_ADMIN_PASS"
 
 if [ "$OCP_CJOC_ROUTE_EDGE_TLS" = "true" ]; then
-    echo -e "\n If you get a password above, please log into your Admin user at https://$OCP_CJOC_ROUTE/cjoc/ and\n\n 1. Complete the Setup Wizard\n 2. Disable CSRF and CAP\n 3. Come back and finish this script...I know, it is lame.\n\n Oh and when you get to the Create First Admin User screen just click Continue as admin - please.  Or otherwise modify this script with your intended password..."
+    echo -e "\n If you get a password above, please log into your Admin user at https://$OCP_CJOC_ROUTE/cjoc/ and\n\n  1. Complete the Setup Wizard\n  2. Disable CSRF and CAP\n  3. Come back and finish this script...I know, it is lame.\n\n Oh and when you get to the Create First Admin User screen just click Continue as admin - please.  Or otherwise modify this script with your intended password..."
 else
-    echo -e "\n If you get a password above, please log into your Admin user at http://$OCP_CJOC_ROUTE/cjoc/ and\n\n 1. Complete the Setup Wizard\n 2. Disable CSRF and CAP\n 3. Come back and finish this script...I know, it is lame.\n\n Oh and when you get to the Create First Admin User screen just click Continue as admin - please.  Or otherwise modify this script with your intended password..."
+    echo -e "\n If you get a password above, please log into your Admin user at http://$OCP_CJOC_ROUTE/cjoc/ and\n\n  1. Complete the Setup Wizard\n  2. Disable CSRF and CAP\n  3. Come back and finish this script...I know, it is lame.\n\n Oh and when you get to the Create First Admin User screen just click Continue as admin - please.  Or otherwise modify this script with your intended password..."
 fi
 
 promptToContinueAfterCJOCDeploy
