@@ -22,7 +22,7 @@ CUSTOM_TRUSTSTORE=$JENKINS_HOME/.cacerts
 if [ ! -f "$CUSTOM_TRUSTSTORE/cacerts" ]; then
     echo "No local keystore found, creating..."
     mkdir -p $CUSTOM_TRUSTSTORE
-    cp $JAVA_HOME/jre/lib/security/cacerts $CUSTOM_TRUSTSTORE
+    cp $JAVA_HOME/lib/security/cacerts $CUSTOM_TRUSTSTORE
 fi
 
 chmod +w $CUSTOM_TRUSTSTORE/cacerts
