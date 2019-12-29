@@ -5,6 +5,8 @@
 set -e
 ## set -x	## Uncomment for debugging
 
+export JAVA_HOME=$(java -XshowSettings:properties -version 2>&1 > /dev/null | grep -oP 'java.home = \K.*')
+
 function testCert() {
   set +e
   (keytool -list -storepass changeit -keystore $1 -alias $2 2>&1 > /dev/null)
