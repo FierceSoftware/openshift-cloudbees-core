@@ -103,17 +103,17 @@ function continueWithCJOCConfig {
 
     echo -e "\n================================================================================"
     echo -e "Downloading Jenkins CLI now from CJOC..."
-    curl -L -sS -o "$CBC_OCP_WORK_DIR/jenkins-cli.jar" "${JENKINS_PROTOCOL_PREFIX}://${OCP_CJOC_ROUTE}/cjoc/jnlpJars/jenkins-cli.jar"
+    curl -k -L -sS -o "$CBC_OCP_WORK_DIR/jenkins-cli.jar" "${JENKINS_PROTOCOL_PREFIX}://${OCP_CJOC_ROUTE}/cjoc/jnlpJars/jenkins-cli.jar"
 
     echo -e "\n================================================================================"
     echo -e "Testing jenkins-cli...\n"
 
-    java -jar $CBC_OCP_WORK_DIR/jenkins-cli.jar -s "${JENKINS_PROTOCOL_PREFIX}://${OCP_CJOC_ROUTE}/cjoc/" who-am-i
+    java -jar $CBC_OCP_WORK_DIR/jenkins-cli.jar -noCertificateCheck -s "${JENKINS_PROTOCOL_PREFIX}://${OCP_CJOC_ROUTE}/cjoc/" who-am-i
 
     echo -e "\n================================================================================"
     echo -e "Safely restarting CJOC...for safe measure...\n"
 
-    java -jar $CBC_OCP_WORK_DIR/jenkins-cli.jar -s "${JENKINS_PROTOCOL_PREFIX}://${OCP_CJOC_ROUTE}/cjoc/" safe-restart
+    java -jar $CBC_OCP_WORK_DIR/jenkins-cli.jar -noCertificateCheck -s "${JENKINS_PROTOCOL_PREFIX}://${OCP_CJOC_ROUTE}/cjoc/" safe-restart
 
     echo -e "\n================================================================================"
     echo "Sleeping for 120s while CJOC restarts...don't touch it yet..."
@@ -122,21 +122,21 @@ function continueWithCJOCConfig {
     echo -e "\n================================================================================"
     echo -e "Pushing Plugin Catalog to CJOC...\n"
 
-    curl -L -sS -o $CBC_OCP_WORK_DIR/dso-ocp-workshop-plugin-catalog.json https://raw.githubusercontent.com/${GIT_USERNAME}/${GIT_REPO_NAME}/${GIT_BRANCH_REF}/jenkins-cli-scripts/dso-ocp-workshop-plugin-catalog.json
+    curl -k -L -sS -o $CBC_OCP_WORK_DIR/dso-ocp-workshop-plugin-catalog.json https://raw.githubusercontent.com/${GIT_USERNAME}/${GIT_REPO_NAME}/${GIT_BRANCH_REF}/jenkins-cli-scripts/dso-ocp-workshop-plugin-catalog.json
 
-    java -jar $CBC_OCP_WORK_DIR/jenkins-cli.jar -s "${JENKINS_PROTOCOL_PREFIX}://${OCP_CJOC_ROUTE}/cjoc/" plugin-catalog --put < $CBC_OCP_WORK_DIR/dso-ocp-workshop-plugin-catalog.json
+    java -jar $CBC_OCP_WORK_DIR/jenkins-cli.jar -noCertificateCheck -s "${JENKINS_PROTOCOL_PREFIX}://${OCP_CJOC_ROUTE}/cjoc/" plugin-catalog --put < $CBC_OCP_WORK_DIR/dso-ocp-workshop-plugin-catalog.json
 
     echo -e "\n\n================================================================================"
     echo -e "Pushing Team Master Recipe to CJOC...\n"
 
-    curl -L -sS -o $CBC_OCP_WORK_DIR/team-master-recipes.json https://raw.githubusercontent.com/${GIT_USERNAME}/${GIT_REPO_NAME}/${GIT_BRANCH_REF}/jenkins-cli-scripts/team-master-recipes.json
+    curl -k -L -sS -o $CBC_OCP_WORK_DIR/team-master-recipes.json https://raw.githubusercontent.com/${GIT_USERNAME}/${GIT_REPO_NAME}/${GIT_BRANCH_REF}/jenkins-cli-scripts/team-master-recipes.json
 
-    java -jar $CBC_OCP_WORK_DIR/jenkins-cli.jar -s "${JENKINS_PROTOCOL_PREFIX}://${OCP_CJOC_ROUTE}/cjoc/" team-creation-recipes --put < $CBC_OCP_WORK_DIR/team-master-recipes.json
+    java -jar $CBC_OCP_WORK_DIR/jenkins-cli.jar -noCertificateCheck -s "${JENKINS_PROTOCOL_PREFIX}://${OCP_CJOC_ROUTE}/cjoc/" team-creation-recipes --put < $CBC_OCP_WORK_DIR/team-master-recipes.json
 
     echo -e "\n\n================================================================================"
     echo -e "Safely restarting CJOC...\n"
 
-    java -jar $CBC_OCP_WORK_DIR/jenkins-cli.jar -s "${JENKINS_PROTOCOL_PREFIX}://${OCP_CJOC_ROUTE}/cjoc/" safe-restart
+    java -jar $CBC_OCP_WORK_DIR/jenkins-cli.jar -noCertificateCheck -s "${JENKINS_PROTOCOL_PREFIX}://${OCP_CJOC_ROUTE}/cjoc/" safe-restart
 
     echo -e "\n================================================================================"
     echo "Sleeping for 120s while CJOC restarts...still don't touch it..."
@@ -288,9 +288,9 @@ function continueWithCJOCConfig {
         cp $DEPLOYER_ORIGIN_DIR/groovy-scripts/example.create-oc-sync-credentials.groovy $DEPLOYER_ORIGIN_DIR/groovy-scripts/working-create-oc-sync-credentials.groovy
         sed -i -e s,REPLACE_ME_WITH_SERVICE_ACCOUNT_TOKEN,$JENKINS_SA_TOKEN,g $DEPLOYER_ORIGIN_DIR/groovy-scripts/working-create-oc-sync-credentials.groovy
 
-        java -jar $CBC_OCP_WORK_DIR/jenkins-cli.jar -s "${JENKINS_PROTOCOL_PREFIX}://${OCP_CJOC_ROUTE}/cjoc/" groovy = < $DEPLOYER_ORIGIN_DIR/groovy-scripts/working-create-generic-credentials.groovy
-        java -jar $CBC_OCP_WORK_DIR/jenkins-cli.jar -s "${JENKINS_PROTOCOL_PREFIX}://${OCP_CJOC_ROUTE}/cjoc/" groovy = < $DEPLOYER_ORIGIN_DIR/groovy-scripts/working-create-oc-client-credentials.groovy
-        java -jar $CBC_OCP_WORK_DIR/jenkins-cli.jar -s "${JENKINS_PROTOCOL_PREFIX}://${OCP_CJOC_ROUTE}/cjoc/" groovy = < $DEPLOYER_ORIGIN_DIR/groovy-scripts/working-create-oc-sync-credentials.groovy
+        java -jar $CBC_OCP_WORK_DIR/jenkins-cli.jar -noCertificateCheck -s "${JENKINS_PROTOCOL_PREFIX}://${OCP_CJOC_ROUTE}/cjoc/" groovy = < $DEPLOYER_ORIGIN_DIR/groovy-scripts/working-create-generic-credentials.groovy
+        java -jar $CBC_OCP_WORK_DIR/jenkins-cli.jar -noCertificateCheck -s "${JENKINS_PROTOCOL_PREFIX}://${OCP_CJOC_ROUTE}/cjoc/" groovy = < $DEPLOYER_ORIGIN_DIR/groovy-scripts/working-create-oc-client-credentials.groovy
+        java -jar $CBC_OCP_WORK_DIR/jenkins-cli.jar -noCertificateCheck -s "${JENKINS_PROTOCOL_PREFIX}://${OCP_CJOC_ROUTE}/cjoc/" groovy = < $DEPLOYER_ORIGIN_DIR/groovy-scripts/working-create-oc-sync-credentials.groovy
         
 
         if [ $CJOC_CaC_SETUP_LDAP_AUTHENTICATION = "true" ]; then
@@ -307,7 +307,7 @@ function continueWithCJOCConfig {
             sed -i -e "s/MANAGER_DN_HERE/${LDAP_BIND_DN}/g" $DEPLOYER_ORIGIN_DIR/groovy-scripts/working-configure-ldap.groovy
             sed -i -e s,TOTALLY_SECURE_PASSWORD_HERE,${LDAP_BIND_PASSWORD},g $DEPLOYER_ORIGIN_DIR/groovy-scripts/working-configure-ldap.groovy
 
-            java -jar $CBC_OCP_WORK_DIR/jenkins-cli.jar -s "$JENKINS_PROTOCOL_PREFIX://$OCP_CJOC_ROUTE/cjoc/" groovy = < $DEPLOYER_ORIGIN_DIR/groovy-scripts/working-configure-ldap.groovy
+            java -jar $CBC_OCP_WORK_DIR/jenkins-cli.jar -noCertificateCheck -s "$JENKINS_PROTOCOL_PREFIX://$OCP_CJOC_ROUTE/cjoc/" groovy = < $DEPLOYER_ORIGIN_DIR/groovy-scripts/working-configure-ldap.groovy
 
             export JENKINS_API_TOKEN=$LDAP_BIND_PASSWORD
         fi
@@ -326,7 +326,7 @@ function continueWithCJOCConfig {
     echo "Creating Workshop Team Master..."
     curl -L -sS -o $CBC_OCP_WORK_DIR/workshop-team.json https://raw.githubusercontent.com/${GIT_USERNAME}/${GIT_REPO_NAME}/${GIT_BRANCH_REF}/jenkins-cli-scripts/workshop-team.json
 
-    java -jar $CBC_OCP_WORK_DIR/jenkins-cli.jar -s "${JENKINS_PROTOCOL_PREFIX}://${OCP_CJOC_ROUTE}/cjoc/" teams "workshop-team" --put < $CBC_OCP_WORK_DIR/workshop-team.json
+    java -jar $CBC_OCP_WORK_DIR/jenkins-cli.jar -noCertificateCheck -s "${JENKINS_PROTOCOL_PREFIX}://${OCP_CJOC_ROUTE}/cjoc/" teams "workshop-team" --put < $CBC_OCP_WORK_DIR/workshop-team.json
 
     echo -e "\n\n================================================================================"
     echo -e "Finished with deploying Cloudbees Core!\n"
