@@ -21,6 +21,8 @@ export OCP_PASSWORD=${OCP_PASSWORD:=""}
 export OCP_TOKEN=${OCP_TOKEN:=""}
 export OCP_CREATE_PROJECT=${OCP_CREATE_PROJECT:="true"}
 export OCP_PROJECT_NAME=${OCP_PROJECT_NAME:="central-cicd"}
+export OCP_PROJECT_DISPLAY_NAME=${OCP_PROJECT_DISPLAY_NAME:="[Shared] Central CI/CD"}
+export OCP_PROJECT_DESCRIPTION=${OCP_PROJECT_DESCRIPTION:="Central & Managed CI/CD Pipeline"}
 export OCP_CJOC_ROUTE=${OCP_CJOC_ROUTE:="cjoc.ocp.example.com"}
 export OCP_CJOC_ROUTE_EDGE_TLS=${OCP_CJOC_ROUTE_EDGE_TLS:="true"}
 export OCP_CJOC_SKIP_SETUP=${OCP_CJOC_SKIP_SETUP:="true"}
@@ -532,7 +534,7 @@ oc $OC_ARG_OPTIONS login $OCP_HOST $OCP_AUTH
 echo -e "\n================================================================================"
 echo "Create and Set Project..."
 if [ "$OCP_CREATE_PROJECT" = "true" ]; then
-    oc $OC_ARG_OPTIONS new-project $OCP_PROJECT_NAME --description="Central & Managed CI/CD Pipeline" --display-name="[Shared] Central CI/CD"
+    oc $OC_ARG_OPTIONS new-project $OCP_PROJECT_NAME --description="$OCP_PROJECT_DESCRIPTION" --display-name="$OCP_PROJECT_DISPLAY_NAME"
     oc $OC_ARG_OPTIONS project $OCP_PROJECT_NAME
 fi
 if [ "$OCP_CREATE_PROJECT" = "false" ]; then
