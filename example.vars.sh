@@ -10,6 +10,8 @@ OCP_TOKEN=""
 
 OCP_CREATE_PROJECT="true"
 OCP_PROJECT_NAME="cicd-pipeline"
+OCP_PROJECT_DISPLAY_NAME="[Shared] Central CI/CD"
+OCP_PROJECT_DESCRIPTION="Central & Managed CI/CD Pipeline"
 
 OCP_CJOC_ROUTE="cjoc.ocp.example.com"
 OCP_CJOC_ROUTE_EDGE_TLS="true"
