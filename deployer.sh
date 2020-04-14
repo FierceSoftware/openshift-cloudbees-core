@@ -565,7 +565,7 @@ if [ "$OCP_CJOC_ROUTE_EDGE_TLS" = "true" ]; then
     sed -e s,http://cloudbees-core,https://cloudbees-core,g < cloudbees-core.yml > tmp && mv tmp cloudbees-core-working.yml && \
     sed -e s,cloudbees-core.example.com,$OCP_CJOC_ROUTE,g < cloudbees-core-working.yml > tmp && mv tmp cloudbees-core-working.yml && \
     sed -e s,myproject,$OCP_PROJECT_NAME,g < cloudbees-core-working.yml > tmp && mv tmp cloudbees-core-working.yml && \
-    sed -e 's/host: /tls:'"\n"'    termination: edge'"\n"'    insecureEdgeTerminationPolicy: Redirect'"\n"'  host: /g' < cloudbees-core-working.yml > tmp && mv tmp cloudbees-core-working.yml
+    sed -e 's/  host: /  tls:'"\n"'    termination: edge'"\n"'    insecureEdgeTerminationPolicy: Redirect'"\n"'  host: /g' < cloudbees-core-working.yml > tmp && mv tmp cloudbees-core-working.yml
 else
     sed -e s,http://cloudbees-core,https://cloudbees-core,g < cloudbees-core.yml > tmp && mv tmp cloudbees-core-working.yml && \
     sed -e s,cloudbees-core.example.com,$OCP_CJOC_ROUTE,g < cloudbees-core-working.yml > tmp && mv tmp cloudbees-core-working.yml && \
